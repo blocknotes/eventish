@@ -1,11 +1,11 @@
 default: &default
   adapter: sqlite3
-  database: ':memory:'
+  # database: ':memory:'
 
 development:
   <<: *default
-  # database: 'db/dev.sqlite3'
+  database: 'db/dev.sqlite3'
 
 test:
   <<: *default
-  # database: 'db/test.sqlite3'
+  database: 'db/test.sqlite3'

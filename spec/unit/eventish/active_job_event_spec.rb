@@ -1,8 +1,10 @@
 # frozen_string_literal: true
 
+require 'active_job/railtie'
 require 'eventish'
+require 'eventish/active_job_event'
 
-RSpec.describe Eventish::SimpleEvent do
+RSpec.describe Eventish::ActiveJobEvent do
   describe 'event API methods' do
     it 'responds to the required class methods', :aggregate_failures do
       expect(described_class).to respond_to(:<=>)
@@ -11,18 +13,7 @@ RSpec.describe Eventish::SimpleEvent do
     end
 
     it { is_expected.to respond_to(:call) }
-  end
-
-  describe '.trigger' do
-    let(:event) { described_class.new }
-
-    before do
-      allow(described_class).to receive(:new).and_return(event)
-      allow(event).to receive(:call)
-      described_class.trigger(:test_event, :some_args)
-    end
-
-    it { expect(event).to have_received(:call).with(:test_event, :some_args) }
+    it { is_expected.to respond_to(:perform) }
   end
 
   describe '#call' do

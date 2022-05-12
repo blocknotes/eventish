@@ -1,7 +1,14 @@
 # frozen_string_literal: true
 
+require 'simplecov'
+
+SimpleCov.start do
+  add_filter '/spec/'
+end
+
 RSpec.configure do |config|
   config.color = true
+  config.disable_monkey_patching!
   config.tty = true
 
   config.expect_with :rspec do |expectations|

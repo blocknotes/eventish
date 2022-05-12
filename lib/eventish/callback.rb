@@ -3,30 +3,14 @@
 module Eventish
   class Callback
     class << self
-      def publish(event_name, target, options: {})
-        ::ActiveSupport::Notifications.instrument(event_name, target: target, event_options: options)
-      end
-
-      def subscribe(event_name, handler)
-        ::ActiveSupport::Notifications.subscribe(event_name) do |name, start, finish, id, payload|
-          args = { event: name, id: id, start: start, finish: finish }
-          if handler < AsyncEvent
-            handler.perform_later(payload[:target], args)
-          else
-            handler.call(payload[:target], args, &payload[:block])
-          end
-        end
-      end
-
-      # --- Callbacks -----------------------------------------------------------
       def callback_event(target, &block)
-        event = "#{target.class.to_s.underscore}_#{__callee__}"
-        ::ActiveSupport::Notifications.instrument(event, target: target, block: block)
+        event = "#{Eventish.underscore(target.class.to_s)}_#{__callee__}"
+        Eventish.adapter.publish(event, target, &block)
       end
 
       def callback_commit_event(target, &block)
-        event = "#{target.class.to_s.underscore}_after_commit"
-        ::ActiveSupport::Notifications.instrument(event, target: target, block: block)
+        event = "#{Eventish.underscore(target.class.to_s)}_after_commit"
+        Eventish.adapter.publish(event, target, &block)
       end
 
       alias_method :after_initialize, :callback_event

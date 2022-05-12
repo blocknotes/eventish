@@ -1,7 +1,8 @@
-_misc/
-coverage/
+.rubocop-*
+.vscode
 
 Gemfile.lock
 
-.rubocop-*
-.vscode
+_misc/
+coverage/
+spec/dummy/db/

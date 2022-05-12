@@ -1,14 +1,22 @@
 # frozen_string_literal: true
 
+require 'eventish/active_job_event'
+require 'eventish/callback'
+require 'eventish/adapters/active_support'
+
+Eventish.setup do |config|
+  config.adapter = Eventish::Adapters::ActiveSupport
+end
+
 Rails.configuration.to_prepare do
+  # NOTE: required to load the event descendants when eager_load is off
   unless Rails.configuration.eager_load
-    # NOTE: needed to load the Event descendants
     events = Rails.root.join('app/events/**/*.rb').to_s
     Dir[events].sort.each { |event| require event }
   end
 end
 
 Rails.configuration.after_initialize do
-  Eventish::SimpleEvent.descendants.sort.each(&:subscribe)
-  Eventish::AsyncEvent.descendants.sort.each(&:subscribe)
+  Eventish::SimpleEvent.subscribe_all
+  Eventish::ActiveJobEvent.subscribe_all
 end

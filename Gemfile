@@ -10,9 +10,11 @@ group :development, :test do
 
   # Testing
   gem 'rspec'
+  gem 'simplecov'
 
   # Linters
   gem 'rubocop'
+  gem 'rubocop-rspec'
 
   # Tools
   gem 'pry'

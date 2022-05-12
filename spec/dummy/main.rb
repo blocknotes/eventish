@@ -1,23 +1,10 @@
 # frozen_string_literal: true
 
-# Source: https://github.com/rails/rails/blob/v7.0.2.4/guides/bug_report_templates/action_controller_gem.rb
-
-# require 'bundler/inline'
-
-# gemfile(true) do
-#   source 'https://rubygems.org'
-
-#   git_source(:github) { |repo| "https://github.com/#{repo}.git" }
-
-#   gem 'rails', '~> 7.0.0'
-#   gem 'sqlite3'
-
-#   gem 'pry'
-# end
-
 require 'action_controller/railtie'
 require 'active_job/railtie'
 require 'active_record/railtie'
+
+require 'eventish'
 
 # Main application class
 class TestApp < Rails::Application
