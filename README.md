@@ -8,8 +8,7 @@ Yet another opinionated events library which proposes a simple API to handle... 
 The main features:
 - _composable_: just require the components that you need;
 - with _adapters_: support ActiveSupport::Notifications for pub/sub events;
-- with _async events_: support ActiveJob for background execution;
-- with _callbacks_: support ActiveRecord callbacks.
+- with _async events_: support ActiveJob for background execution.
 
 ## Install
 
@@ -34,7 +33,7 @@ end
 Rails.configuration.after_initialize do
   Eventish::SimpleEvent.subscribe_all # NOTE: events will be available after this point
 
-  Eventish.adapter.publish('app_loaded') # just a test event
+  Eventish.publish('app_loaded') # just a test event
 end
 ```
 
@@ -98,7 +97,7 @@ module Main
 end
 ```
 
-Publish the event: `Eventish.adapter.publish('some_event')`
+Publish the event: `Eventish.publish('some_event')`
 
 ### Async events
 
@@ -124,27 +123,6 @@ module Notifications
   end
 end
 ```
-
-### Callbacks
-
-Wrapper for callbacks. Only _ActiveRecord_ is supported for now.
-This is just a glue component to have callbacks with a nice syntax.
-
-```rb
-# initializer setup
-require 'eventish/callback'
-```
-
-Sample model usage:
-
-```rb
-class User < ActiveRecord::Base
-  before_validation ::Eventish::Callback
-  after_save_commit ::Eventish::Callback
-end
-```
-
-For events definition see Simple or Async events.
 
 ## Do you like it? Star it!
 
