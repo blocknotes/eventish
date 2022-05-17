@@ -1,12 +1,15 @@
 # Eventish
 
+[![Gem Version](https://badge.fury.io/rb/eventish.svg)](https://badge.fury.io/rb/eventish)
+[![Specs](https://github.com/blocknotes/eventish/actions/workflows/main.yml/badge.svg)](https://github.com/blocknotes/eventish/actions/workflows/main.yml)
+
 Yet another opinionated events library which proposes a simple API to handle... events 🎉
 
 The main features:
-- composable: just require the components that you need;
-- with adapters: support _ActiveSupport::Notifications_;
-- with async events: support _ActiveJob_;
-- with callbacks: support _ActiveRecord_.
+- _composable_: just require the components that you need;
+- with _adapters_: support ActiveSupport::Notifications for pub/sub events;
+- with _async events_: support ActiveJob for background execution;
+- with _callbacks_: support ActiveRecord callbacks.
 
 ## Install
 
