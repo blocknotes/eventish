@@ -18,6 +18,10 @@ module Eventish
     @options ||= Struct.new(*OPTIONS).new # rubocop:disable Naming/MemoizedInstanceVariableName
   end
 
+  def publish(event_name, target = nil, &block)
+    config.adapter&.publish(event_name, target, &block)
+  end
+
   def setup
     @options ||= Struct.new(*OPTIONS).new
     yield(@options) if block_given?
