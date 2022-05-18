@@ -6,7 +6,7 @@ require_relative 'eventish/simple_event'
 module Eventish
   OPTIONS = %i[adapter].freeze
 
-  MissingAdapterError = Class.new(StandardError)
+  AdapterError = Class.new(StandardError)
 
   module_function
 
@@ -25,7 +25,7 @@ module Eventish
   def setup
     @options ||= Struct.new(*OPTIONS).new
     yield(@options) if block_given?
-    raise MissingAdapterError, 'Please specify an event adapter' unless @options.adapter
+    raise AdapterError, 'Please specify an event adapter' unless @options.adapter
 
     @options
   end

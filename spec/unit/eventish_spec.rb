@@ -11,10 +11,10 @@ RSpec.describe Eventish do
 
   describe '.setup' do
     context 'when an adapter is not set' do
-      it 'raises MissingAdapterError' do
+      it 'raises AdapterError' do
         expect do
           described_class.setup { |config| config.adapter = nil }
-        end.to raise_exception(Eventish::MissingAdapterError)
+        end.to raise_exception(Eventish::AdapterError)
       end
     end
 
