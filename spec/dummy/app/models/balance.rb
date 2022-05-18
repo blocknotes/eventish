@@ -3,5 +3,5 @@
 class Balance < ActiveRecord::Base
   belongs_to :user
 
-  around_create ->(_object, block) { ::Eventish.publish(Logs::BalanceAroundCreateEvent, self, options: { block: block }) }
+  around_create ->(_object, block) { ::Eventish.publish(Logs::BalanceAroundCreateEvent, self, block: block) }
 end

@@ -13,11 +13,8 @@ RSpec.describe Eventish::Adapters::ActiveSupport do
 
     it 'calls instrument on ActiveSupport::Notifications' do
       described_class.publish('some_event', :some_target)
-      expect(ActiveSupport::Notifications).to have_received(:instrument).with(
-        'some_event',
-        event_options: {},
-        target: :some_target
-      )
+      expected_attrs = { options: { block: nil }, target: :some_target }
+      expect(ActiveSupport::Notifications).to have_received(:instrument).with('some_event', expected_attrs)
     end
 
     context 'when the event is missing' do

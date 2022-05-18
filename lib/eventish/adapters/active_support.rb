@@ -4,10 +4,11 @@ module Eventish
   class Adapters
     class ActiveSupport
       class << self
-        def publish(event, target = nil, options: {})
+        def publish(event, target = nil, block: nil)
           raise ArgumentError, 'Missing event to publish' if event.nil?
 
-          ::ActiveSupport::Notifications.instrument(event.to_s, target: target, event_options: options)
+          options = { block: block }
+          ::ActiveSupport::Notifications.instrument(event.to_s, target: target, options: options)
         end
 
         def subscribe(event, handler)
@@ -16,7 +17,7 @@ module Eventish
 
           ::ActiveSupport::Notifications.subscribe(event.to_s) do |name, start, finish, id, payload|
             args = { event: name, id: id, start: start, finish: finish }
-            handler.trigger(payload[:target], args, &payload.dig(:event_options, :block))
+            handler.trigger(payload[:target], args, &payload.dig(:options, :block))
           end
         end
 

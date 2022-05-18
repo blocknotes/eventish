@@ -18,8 +18,8 @@ module Eventish
     @options ||= Struct.new(*OPTIONS).new # rubocop:disable Naming/MemoizedInstanceVariableName
   end
 
-  def publish(event_name, target = nil, options: {})
-    config.adapter&.publish(event_name, target, options: options)
+  def publish(event_name, target = nil, block: nil)
+    config.adapter&.publish(event_name, target, block: block)
   end
 
   def setup
