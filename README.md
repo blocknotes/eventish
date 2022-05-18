@@ -88,8 +88,7 @@ module Main
 
     class << self
       def event_name
-        # this is optional, if not set the event name will be inferred from the class name
-        # in this sample it would be "test" - TestEvent => underscore => remove _event suffix
+        # this is optional, if not set the class name to string will be used
         'some_event'
       end
     end

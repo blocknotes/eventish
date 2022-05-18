@@ -4,19 +4,27 @@ module Eventish
   class Adapters
     class ActiveSupport
       class << self
-        def publish(event_name, target = nil, options: {})
-          ::ActiveSupport::Notifications.instrument(event_name, target: target, event_options: options)
+        def publish(event, target = nil, block: nil)
+          raise ArgumentError, 'Missing event to publish' if event.nil?
+
+          options = { block: block }
+          ::ActiveSupport::Notifications.instrument(event.to_s, target: target, options: options)
         end
 
-        def subscribe(event_name, handler)
-          ::ActiveSupport::Notifications.subscribe(event_name) do |name, start, finish, id, payload|
+        def subscribe(event, handler)
+          raise ArgumentError, 'Missing event to subscribe' if event.nil?
+          raise ArgumentError, 'Missing handler for subscription' if handler.nil?
+
+          ::ActiveSupport::Notifications.subscribe(event.to_s) do |name, start, finish, id, payload|
             args = { event: name, id: id, start: start, finish: finish }
-            handler.trigger(payload[:target], args, &payload[:block])
+            handler.trigger(payload[:target], args, &payload.dig(:options, :block))
           end
         end
 
-        def unsubscribe(event_name)
-          ::ActiveSupport::Notifications.unsubscribe(event_name)
+        def unsubscribe(event)
+          raise ArgumentError, 'Missing event to unsubscribe' if event.nil?
+
+          ::ActiveSupport::Notifications.unsubscribe(event.to_s)
         end
       end
     end

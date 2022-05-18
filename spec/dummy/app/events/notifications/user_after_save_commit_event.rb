@@ -8,7 +8,7 @@ module Notifications
 
     class << self
       def event_name
-        'user_after_commit'
+        'user_after_save_commit'
       end
 
       # def priority
