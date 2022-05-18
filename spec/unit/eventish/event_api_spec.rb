@@ -42,7 +42,7 @@ RSpec.describe Eventish::EventApi do
     before { stub_const('::ANamespace::SomeTestEvent', event1) }
 
     it 'returns the event name' do
-      expect(ANamespace::SomeTestEvent.event_name).to eq 'some_test'
+      expect(ANamespace::SomeTestEvent.event_name).to eq 'ANamespace::SomeTestEvent'
     end
 
     context 'when event_name is overridden' do
@@ -71,7 +71,7 @@ RSpec.describe Eventish::EventApi do
 
     it 'subscribes to the event' do
       event1.subscribe
-      expect(adapter).to have_received(:subscribe).with('some_test', event1)
+      expect(adapter).to have_received(:subscribe).with('SomeTestEvent', event1)
     end
   end
 
@@ -95,7 +95,7 @@ RSpec.describe Eventish::EventApi do
 
     it 'subscribes to all events', :aggregate_failures do
       SomeTestEvent.subscribe_all
-      expect(adapter).to have_received(:subscribe).with('some_test', event1)
+      expect(adapter).to have_received(:subscribe).with('SomeTestEvent', event1)
     end
   end
 end

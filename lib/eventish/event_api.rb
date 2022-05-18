@@ -7,8 +7,7 @@ module Eventish
     end
 
     def event_name
-      # If event_name is not set, infer the event from the class name
-      @event_name ||= Eventish.underscore(to_s).delete_suffix('_event')
+      @event_name ||= to_s
     end
 
     def priority

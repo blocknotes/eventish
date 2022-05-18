@@ -9,9 +9,9 @@ module Balances
     end
 
     class << self
-      # def event_name
-      #   'user_after_commit'
-      # end
+      def event_name
+        'user_after_commit'
+      end
 
       def priority
         10

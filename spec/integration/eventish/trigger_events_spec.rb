@@ -14,7 +14,8 @@ RSpec.describe 'Trigger events' do
     end
 
     it 'triggers the expected events' do
-      expect(event).to have_received(:call).with(user, a_hash_including(event: 'user_before_validation'))
+      event_name = ::Balances::UserBeforeValidationEvent.to_s
+      expect(event).to have_received(:call).with(user, a_hash_including(event: event_name))
     end
   end
 

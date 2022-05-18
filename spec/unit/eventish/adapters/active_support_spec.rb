@@ -19,6 +19,14 @@ RSpec.describe Eventish::Adapters::ActiveSupport do
         target: :some_target
       )
     end
+
+    context 'when the event is missing' do
+      it do
+        expect do
+          described_class.publish(nil, :some_target)
+        end.to raise_exception(ArgumentError)
+      end
+    end
   end
 
   describe '.subscribe' do
@@ -36,6 +44,22 @@ RSpec.describe Eventish::Adapters::ActiveSupport do
       expect(ActiveSupport::Notifications).to have_received(:subscribe).with('some_event')
       expect(some_handler).to have_received(:trigger)
     end
+
+    context 'when the event is missing' do
+      it do
+        expect do
+          described_class.subscribe(nil, :some_target)
+        end.to raise_exception(ArgumentError)
+      end
+    end
+
+    context 'when the handler is missing' do
+      it do
+        expect do
+          described_class.subscribe(:some_event, nil)
+        end.to raise_exception(ArgumentError)
+      end
+    end
   end
 
   describe '.unsubscribe' do
@@ -46,6 +70,14 @@ RSpec.describe Eventish::Adapters::ActiveSupport do
     it 'calls unsubscribe on ActiveSupport::Notifications', :aggregate_failures do
       described_class.unsubscribe('some_event')
       expect(ActiveSupport::Notifications).to have_received(:unsubscribe)
+    end
+
+    context 'when the event is missing' do
+      it do
+        expect do
+          described_class.unsubscribe(nil)
+        end.to raise_exception(ArgumentError)
+      end
     end
   end
 end
