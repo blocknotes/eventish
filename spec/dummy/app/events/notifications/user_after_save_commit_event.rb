@@ -6,14 +6,14 @@ module Notifications
       Rails.logger.info ">>> User ##{user.id} after commit notification"
     end
 
-    class << self
-      def event_name
-        'user_after_save_commit'
-      end
+    # class << self
+    #   def event_name
+    #     'user_after_save_commit'
+    #   end
 
-      # def priority
-      #   1
-      # end
-    end
+    #   def priority
+    #     1
+    #   end
+    # end
   end
 end

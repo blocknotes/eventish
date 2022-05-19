@@ -21,11 +21,11 @@ RSpec.describe 'Trigger events' do
 
   describe 'commit events' do
     let(:user) { User.new }
-    let(:event) { Balances::UserAfterCommitEvent.new }
+    let(:event1) { Balances::UserAfterCommitEvent.new }
 
     before do
-      allow(Balances::UserAfterCommitEvent).to receive(:new).and_return(event)
-      allow(event).to receive(:call)
+      allow(Balances::UserAfterCommitEvent).to receive(:new).and_return(event1)
+      allow(event1).to receive(:call)
       user.save!
     end
 
@@ -34,7 +34,7 @@ RSpec.describe 'Trigger events' do
       #   user.save!
       # }.to have_enqueued_job(Notifications::UserAfterSaveCommitEvent)
 
-      expect(event).to have_received(:call).with(user, a_hash_including(event: 'user_after_commit'))
+      expect(event1).to have_received(:call).with(user, a_hash_including(event: 'Balances::UserAfterCommitEvent'))
     end
   end
 
@@ -67,12 +67,7 @@ RSpec.describe 'Trigger events' do
       expect(Test1).not_to have_received(:trigger)
       Eventish.publish('some_event', some_object)
 
-      expected_attrs = {
-        event: 'some_event',
-        start: a_kind_of(Time),
-        finish: a_kind_of(Time),
-        id: anything
-      }
+      expected_attrs = { event: 'some_event', start: a_kind_of(Time), finish: a_kind_of(Time), id: anything }
       expect(Test1).to have_received(:trigger).with(some_object, expected_attrs)
     end
   end
