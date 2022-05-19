@@ -8,7 +8,8 @@ RSpec.describe 'Setup' do
       Balances::UserAfterCommitEvent,
       Balances::UserBeforeValidationEvent,
       Logs::BalanceAroundCreateEvent,
-      App::AppLoadedEvent
+      App::AppLoadedEvent,
+      Notifications::UserGoneEvent
     ]
     expect(Eventish::SimpleEvent.descendants.sort).to match_array(expected_events)
   end

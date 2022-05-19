@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'eventish/active_job_event'
+require 'eventish/active_record/callback'
 require 'eventish/adapters/active_support'
 
 Eventish.setup do |config|

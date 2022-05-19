@@ -8,7 +8,8 @@ Yet another opinionated events library which proposes a simple API to handle... 
 The main features:
 - _composable_: just require the components that you need;
 - with _adapters_: support ActiveSupport::Notifications for pub/sub events;
-- with _async events_: support ActiveJob for background execution.
+- with _async events_: support ActiveJob for background execution;
+- with _callbacks_ wrapper: support ActiveRecord.
 
 ## Install
 
@@ -122,6 +123,25 @@ module Notifications
   end
 end
 ```
+
+### Callbacks
+
+Only for ActiveRecord, callbacks wrapper are available with the postfix `_event` (ex. `after_commit_event SomeEvent`).
+
+```rb
+# initializer setup
+require 'eventish/active_record/callback'
+```
+
+```rb
+class SomeModel < ActiveRecord::Base
+  extend ::Eventish::ActiveRecord::Callback
+
+  before_validation_event SomeBeforeValidationEvent
+end
+```
+
+The related callback will be setup by the wrapper and the specified event class will be invoked accordingly.
 
 ## Do you like it? Star it!
 
