@@ -4,12 +4,12 @@ module Eventish
   module ActiveRecord
     module Callback
       # Init events
-      def after_initialize_event
-        before_validation -> { ::Eventish.publish(event, self) }
+      def after_initialize_event(event)
+        after_initialize -> { ::Eventish.publish(event, self) }
       end
 
-      def after_find_event
-        before_validation -> { ::Eventish.publish(event, self) }
+      def after_find_event(event)
+        after_find -> { ::Eventish.publish(event, self) }
       end
 
       # Validation events
@@ -27,7 +27,7 @@ module Eventish
       end
 
       def around_create_event(event)
-        around_create -> { ::Eventish.publish(event, self) }
+        around_create ->(_object, block) { ::Eventish.publish(event, self, block: block) }
       end
 
       def after_create_event(event)
@@ -40,7 +40,7 @@ module Eventish
       end
 
       def around_update_event(event)
-        around_update -> { ::Eventish.publish(event, self) }
+        around_update ->(_object, block) { ::Eventish.publish(event, self, block: block) }
       end
 
       def after_update_event(event)
@@ -53,7 +53,7 @@ module Eventish
       end
 
       def around_save_event(event)
-        around_save -> { ::Eventish.publish(event, self) }
+        around_save ->(_object, block) { ::Eventish.publish(event, self, block: block) }
       end
 
       def after_save_event(event)
@@ -66,7 +66,7 @@ module Eventish
       end
 
       def around_destroy_event(event)
-        around_destroy -> { ::Eventish.publish(event, self) }
+        around_destroy ->(_object, block) { ::Eventish.publish(event, self, block: block) }
       end
 
       def after_destroy_event(event)
@@ -78,16 +78,16 @@ module Eventish
         after_commit -> { ::Eventish.publish(event, self) }
       end
 
-      def after_save_commit_event(event)
-        after_save_commit -> { ::Eventish.publish(event, self) }
-      end
-
       def after_create_commit_event(event)
         after_create_commit -> { ::Eventish.publish(event, self) }
       end
 
       def after_update_commit_event(event)
         after_update_commit -> { ::Eventish.publish(event, self) }
+      end
+
+      def after_save_commit_event(event)
+        after_save_commit -> { ::Eventish.publish(event, self) }
       end
 
       def after_destroy_commit_event(event)
