@@ -7,7 +7,10 @@ module Eventish
     end
 
     def perform(target, args)
+      self.class.before_event.each { |plugin| plugin.call(target, args, event: self, hook: :before) }
       call(target, args)
+      self.class.after_event.each { |plugin| plugin.call(target, args, event: self, hook: :after) }
+      self
     end
 
     class << self

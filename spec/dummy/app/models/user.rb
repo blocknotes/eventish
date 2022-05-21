@@ -10,5 +10,4 @@ class User < ActiveRecord::Base
 
   after_commit_event ::Balances::UserAfterCommitEvent
   after_save_commit_event ::Notifications::UserAfterSaveCommitEvent
-  after_destroy_commit_event ::Notifications::UserGoneEvent
 end

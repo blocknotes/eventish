@@ -5,4 +5,5 @@ Gemfile.lock
 
 _misc/
 coverage/
-spec/dummy/db/
+spec/dummy/db/*
+spec/dummy/log/*

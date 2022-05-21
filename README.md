@@ -7,9 +7,10 @@ Yet another opinionated events library which proposes a simple API to handle... 
 
 The main features:
 - _composable_: just require the components that you need;
-- with _adapters_: support ActiveSupport::Notifications for pub/sub events;
-- with _async events_: support ActiveJob for background execution;
-- with _callbacks_ wrapper: support ActiveRecord.
+- with [adapters](#adapters): support ActiveSupport::Notifications for pub/sub events;
+- with [async events](#async-events): support ActiveJob for background execution;
+- with [callbacks wrapper](#callbacks): support ActiveRecord.
+- with [plugins](#plugins): logger and Rails logger included.
 
 ## Install
 
@@ -52,7 +53,7 @@ end
 
 For a complete example please take a look at the [dummy app](spec/dummy) in the specs.
 
-### Adatpers
+### Adapters
 
 Only _ActiveSupport_ is supported for now.
 
@@ -142,6 +143,32 @@ end
 ```
 
 The related callback will be setup by the wrapper and the specified event class will be invoked accordingly.
+
+### Plugins
+
+A plugins system is available for custom processing, a logger and a Rails logger are included in the gem.
+
+```rb
+# initializer setup
+require 'eventish/plugins/rails_logger' # without rails_ for a simple stdout logger
+
+Eventish.setup do |config|
+  config.before_event = [Eventish::Plugins::RailsLogger]
+  config.after_event = [Eventish::Plugins::RailsLogger]
+end
+```
+
+A sample plugin:
+
+```rb
+module Eventish::Plugins::RailsLogger
+  class << self
+    def call(target, _args, event:, hook: nil, &_block)
+      Rails.logger.debug "EVENT: #{hook} #{event.class.event_name} on #{target.inspect}"
+    end
+  end
+end
+```
 
 ## Do you like it? Star it!
 

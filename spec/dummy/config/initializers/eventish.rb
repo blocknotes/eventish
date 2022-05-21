@@ -3,6 +3,7 @@
 require 'eventish/active_job_event'
 require 'eventish/active_record/callback'
 require 'eventish/adapters/active_support'
+require 'eventish/plugins/rails_logger'
 
 Eventish.setup do |config|
   config.adapter = Eventish::Adapters::ActiveSupport
