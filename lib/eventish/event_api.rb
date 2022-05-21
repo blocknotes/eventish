@@ -6,6 +6,14 @@ module Eventish
       other&.priority <=> priority
     end
 
+    def after_event
+      Eventish.config.after_event || []
+    end
+
+    def before_event
+      Eventish.config.before_event || []
+    end
+
     def event_name
       @event_name ||= to_s
     end

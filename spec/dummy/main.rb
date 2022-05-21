@@ -13,11 +13,15 @@ class TestApp < Rails::Application
   config.autoload_paths << Rails.root.join('lib')
   config.eager_load = true
   config.hosts << 'example.org'
-  config.logger = Logger.new($stdout)
   config.root = __dir__
   config.session_store :cookie_store, key: 'cookie_store_key'
   secrets.secret_key_base = 'secret_key_base'
-  Rails.logger = config.logger
+
+  unless ENV['DISABLE_LOGS']
+    config.logger = Logger.new($stdout)
+    Rails.logger = config.logger
+    Rails.logger.level = Logger::DEBUG
+  end
 
   routes.append do
     get '/home' => ->(_env) { [200, { 'Content-Type' => 'text/plain' }, ['Home']] }

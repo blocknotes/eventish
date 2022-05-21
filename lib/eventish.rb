@@ -4,7 +4,7 @@ require_relative 'eventish/event_api'
 require_relative 'eventish/simple_event'
 
 module Eventish
-  OPTIONS = %i[adapter].freeze
+  OPTIONS = %i[adapter after_event before_event].freeze
 
   AdapterError = Class.new(StandardError)
 
