@@ -2,6 +2,7 @@
 
 [![Gem Version](https://badge.fury.io/rb/eventish.svg)](https://badge.fury.io/rb/eventish)
 [![Specs](https://github.com/blocknotes/eventish/actions/workflows/main.yml/badge.svg)](https://github.com/blocknotes/eventish/actions/workflows/main.yml)
+[![Linters](https://github.com/blocknotes/eventish/actions/workflows/linters.yml/badge.svg)](https://github.com/blocknotes/eventish/actions/workflows/linters.yml)
 
 Yet another opinionated events library which proposes a simple API to handle... events 🎉
 
