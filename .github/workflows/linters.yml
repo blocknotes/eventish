@@ -1,0 +1,36 @@
+---
+name: Linters
+
+on:
+  push:
+    branches:
+      - main
+
+  pull_request:
+
+jobs:
+  reviewdog:
+    name: reviewdog
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '2.7'
+          bundler-cache: true
+
+      - uses: reviewdog/action-setup@v1
+        with:
+          reviewdog_version: latest
+
+      - name: Run reviewdog
+        env:
+          REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          reviewdog -fail-on-error -reporter=github-pr-review -runners=fasterer,rubocop
+
+        # NOTE: check with: reviewdog -fail-on-error -reporter=github-pr-review -runners=fasterer -diff="git diff" -tee

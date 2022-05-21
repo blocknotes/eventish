@@ -13,6 +13,7 @@ group :development, :test do
   gem 'simplecov'
 
   # Linters
+  gem 'fasterer'
   gem 'rubocop'
   gem 'rubocop-rspec'
 
