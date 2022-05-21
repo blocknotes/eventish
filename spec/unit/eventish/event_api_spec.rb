@@ -61,7 +61,7 @@ RSpec.describe Eventish::EventApi do
   end
 
   describe '#subscribe' do
-    let(:adapter) { double('Adapter') } # rubocop:disable RSpec/VerifiedDoubles
+    let(:adapter) { double('Adapter') }
 
     before do
       stub_const('SomeTestEvent', event1)
@@ -84,7 +84,7 @@ RSpec.describe Eventish::EventApi do
       end
     end
 
-    let(:adapter) { double('Adapter') } # rubocop:disable RSpec/VerifiedDoubles
+    let(:adapter) { double('Adapter') }
 
     before do
       stub_const('SomeTestEvent', event1)

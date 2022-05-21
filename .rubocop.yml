@@ -7,7 +7,6 @@ require:
 
 AllCops:
   Exclude:
-    - _misc/*
     - bin/*
     - vendor/**/*
   NewCops: enable
@@ -20,6 +19,9 @@ RSpec/DescribeClass:
 
 RSpec/ExampleLength:
   Max: 10
+
+RSpec/VerifiedDoubles:
+  Enabled: false
 
 RSpec/VerifiedDoubleReference:
   Enabled: false
