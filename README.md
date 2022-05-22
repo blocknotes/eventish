@@ -4,19 +4,23 @@
 [![Specs](https://github.com/blocknotes/eventish/actions/workflows/main.yml/badge.svg)](https://github.com/blocknotes/eventish/actions/workflows/main.yml)
 [![Linters](https://github.com/blocknotes/eventish/actions/workflows/linters.yml/badge.svg)](https://github.com/blocknotes/eventish/actions/workflows/linters.yml)
 
-Yet another opinionated events library which proposes a simple API to handle... events 🎉
+Yet another events library with a _simple_ API to handle... events :tada:
 
-The main features:
+Main features:
 - _composable_: just require the components that you need;
 - with [adapters](#adapters): support ActiveSupport::Notifications for pub/sub events;
-- with [async events](#async-events): support ActiveJob for background execution;
-- with [callbacks wrapper](#callbacks): support ActiveRecord.
-- with [plugins](#plugins): logger and Rails logger included.
+- with [async events](#async-events): support ActiveJob for events background execution;
+- with [callbacks wrapper](#callbacks): support ActiveRecord callbacks.
+- with [plugins](#plugins): a simple logger and a Rails logger included.
+
+Please :star: if you like it.
+
+> You need _eventish_ if you want to speak by events :smile:
 
 ## Install
 
 - Add to your Gemfile: `gem 'eventish'` (and execute `bundle`)
-- Create an initializer - _config/initializers/eventish.rb_:
+- Create an initializer - ex. _config/initializers/eventish.rb_:
 
 ```rb
 require 'eventish/adapters/active_support'
@@ -40,7 +44,7 @@ Rails.configuration.after_initialize do
 end
 ```
 
-- Create some events - _app/events/main/app_loaded_event.rb_:
+- Create some events - ex. _app/events/main/app_loaded_event.rb_:
 
 ```rb
 module Main
@@ -56,7 +60,8 @@ For a complete example please take a look at the [dummy app](spec/dummy) in the 
 
 ### Adapters
 
-Only _ActiveSupport_ is supported for now.
+The component used events subscription and publishing.
+Only _ActiveSupport Notification_ is supported for now.
 
 ```rb
 # initializer setup
@@ -80,7 +85,7 @@ Rails.configuration.after_initialize do
 end
 ```
 
-Sample event - _app/events/main/test_event.rb_:
+Sample event - ex. _app/events/main/test_event.rb_:
 
 ```rb
 module Main
@@ -99,11 +104,16 @@ module Main
 end
 ```
 
-Publish the event: `Eventish.publish('some_event')`
+Publish the event with:
+
+```rb
+Eventish.publish('some_event')
+```
 
 ### Async events
 
-Events executed in a background process. Only _ActiveJob_ is supported for now.
+Events executed in a background process.
+Only _ActiveJob_ is supported for now.
 
 ```rb
 # initializer setup
@@ -114,7 +124,7 @@ Rails.configuration.after_initialize do
 end
 ```
 
-Sample event - _app/events/notifications/user_after_save_commit_event.rb_:
+Sample event - ex. _app/events/notifications/user_after_save_commit_event.rb_:
 
 ```rb
 module Notifications
@@ -128,7 +138,7 @@ end
 
 ### Callbacks
 
-Only for ActiveRecord, callbacks wrapper are available with the postfix `_event` (ex. `after_commit_event SomeEvent`).
+Wrappers for ActiveRecord callbacks using the postfix `_event` (ex. `after_commit_event SomeEvent`).
 
 ```rb
 # initializer setup
@@ -136,6 +146,7 @@ require 'eventish/active_record/callback'
 ```
 
 ```rb
+# sample model
 class SomeModel < ActiveRecord::Base
   extend ::Eventish::ActiveRecord::Callback
 
@@ -170,6 +181,8 @@ module Eventish::Plugins::RailsLogger
   end
 end
 ```
+
+Plugins can also be configured for single events overriding _before_event_ and _after_event_.
 
 ## Do you like it? Star it!
 
