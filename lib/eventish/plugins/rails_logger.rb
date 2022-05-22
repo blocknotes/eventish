@@ -5,7 +5,7 @@ module Eventish
     class RailsLogger
       class << self
         def call(target, _args, event:, hook: nil, &_block)
-          Rails.logger.debug "EVENT: #{hook} #{event.class.event_name} on #{target.inspect}"
+          ::Rails.logger.debug "EVENT: #{hook} #{event.class.event_name} on #{target.inspect}"
         end
       end
     end
