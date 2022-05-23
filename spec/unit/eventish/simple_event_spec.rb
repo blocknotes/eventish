@@ -3,14 +3,8 @@
 require 'eventish'
 
 RSpec.describe Eventish::SimpleEvent do
-  describe 'event API methods' do
-    it 'responds to the required class methods', :aggregate_failures do
-      expect(described_class).to respond_to(:<=>)
-      expect(described_class).to respond_to(:subscribe)
-      expect(described_class).to respond_to(:trigger)
-    end
-
-    it { is_expected.to respond_to(:call) }
+  describe 'events API' do
+    it { expect(described_class.singleton_class).to include Eventish::EventApi }
   end
 
   describe '.trigger' do
@@ -19,10 +13,36 @@ RSpec.describe Eventish::SimpleEvent do
     before do
       allow(described_class).to receive(:new).and_return(event)
       allow(event).to receive(:call)
-      described_class.trigger(:test_event, :some_args)
     end
 
-    it { expect(event).to have_received(:call).with(:test_event, :some_args) }
+    it do
+      described_class.trigger(:test_event, :some_args)
+      expect(event).to have_received(:call).with(:test_event, :some_args)
+    end
+
+    context 'when before_event is defined' do
+      before do
+        plugin = ->(_target, _args, event:, hook:, &_block) { puts "#{hook}: #{event}" }
+        allow(described_class).to receive(:before_event).and_return([plugin])
+      end
+
+      it do
+        expected_output = /\Abefore: #<Eventish::SimpleEvent.*>\Z/
+        expect { described_class.trigger(:test_event, :some_args) }.to output(expected_output).to_stdout
+      end
+    end
+
+    context 'when after_event is defined' do
+      before do
+        plugin = ->(_target, _args, event:, hook:, &_block) { puts "#{hook}: #{event}" }
+        allow(described_class).to receive(:after_event).and_return([plugin])
+      end
+
+      it do
+        expected_output = /\Aafter: #<Eventish::SimpleEvent.*>\Z/
+        expect { described_class.trigger(:test_event, :some_args) }.to output(expected_output).to_stdout
+      end
+    end
   end
 
   describe '#call' do

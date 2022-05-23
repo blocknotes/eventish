@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'rails'
 require 'eventish'
 require 'eventish/adapters/active_support'
 
@@ -19,7 +20,7 @@ RSpec.describe Eventish::Adapters::ActiveSupport do
       it do
         expect do
           described_class.publish(nil, :some_target)
-        end.to raise_exception(ArgumentError)
+        end.to raise_exception(ArgumentError, 'Missing event to publish')
       end
     end
   end
@@ -44,7 +45,7 @@ RSpec.describe Eventish::Adapters::ActiveSupport do
       it do
         expect do
           described_class.subscribe(nil, :some_target)
-        end.to raise_exception(ArgumentError)
+        end.to raise_exception(ArgumentError, 'Missing event to subscribe')
       end
     end
 
@@ -52,7 +53,7 @@ RSpec.describe Eventish::Adapters::ActiveSupport do
       it do
         expect do
           described_class.subscribe(:some_event, nil)
-        end.to raise_exception(ArgumentError)
+        end.to raise_exception(ArgumentError, 'Missing handler for subscription')
       end
     end
   end
@@ -71,7 +72,7 @@ RSpec.describe Eventish::Adapters::ActiveSupport do
       it do
         expect do
           described_class.unsubscribe(nil)
-        end.to raise_exception(ArgumentError)
+        end.to raise_exception(ArgumentError, 'Missing event to unsubscribe')
       end
     end
   end
