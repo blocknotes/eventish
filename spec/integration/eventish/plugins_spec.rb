@@ -102,4 +102,16 @@ RSpec.describe 'Plugins' do
       end
     end
   end
+
+  describe 'custom plugin' do
+    before do
+      custom_plugin = ->(_target, _args, event:, hook:) { puts "Custom plugin: #{event.class.name}" }
+      allow(Eventish.config).to receive(:before_event).and_return([custom_plugin])
+    end
+
+    it "executes the plugin's call method" do
+      expected_output = /Custom plugin: Balances::UserBeforeValidationEvent/
+      expect { User.new(name: 'Mat').valid? }.to output(expected_output).to_stdout
+    end
+  end
 end

@@ -2,7 +2,6 @@
 
 require 'rails_helper'
 require 'active_record/railtie'
-require 'eventish'
 require 'eventish/active_record/callback'
 
 RSpec.describe 'Callbacks' do
