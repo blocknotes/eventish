@@ -18,6 +18,11 @@ RSpec.describe Eventish::EventApi do
     end
   end
 
+  before do
+    stub_const('FirstEvent', event1)
+    stub_const('SecondEvent', event2)
+  end
+
   describe '#<=>' do
     it 'returns 0 if the priority is the same' do
       allow(event1).to receive(:priority).and_return(1)
@@ -38,21 +43,43 @@ RSpec.describe Eventish::EventApi do
     end
   end
 
-  describe '#event_name' do
-    before { stub_const('::ANamespace::SomeTestEvent', event1) }
+  describe '#after_event' do
+    it { expect(event1.after_event).to be_empty }
 
-    it 'returns the event name' do
-      expect(ANamespace::SomeTestEvent.event_name).to eq 'ANamespace::SomeTestEvent'
+    context 'when after_event is configured' do
+      let(:plugin) do
+        ->(_target, _args, event:, hook:, &_block) { puts "#{hook}: #{event}" }
+      end
+
+      before do
+        allow(Eventish.config).to receive(:after_event).and_return [plugin]
+      end
+
+      it('includes the expected plugin') { expect(event1.after_event).to match_array(plugin) }
+    end
+  end
+
+  describe '#before_event' do
+    it 'returns an empty array' do
+      expect(event1.before_event).to eq []
     end
 
-    context 'when event_name is overridden' do
-      before do
-        allow(event1).to receive(:event_name).and_return('another_name')
+    context 'when before_event is configured' do
+      let(:plugin) do
+        ->(_target, _args, event:, hook:, &_block) { puts "#{hook}: #{event}" }
       end
 
-      it 'returns the overridden event name' do
-        expect(ANamespace::SomeTestEvent.event_name).to eq 'another_name'
+      before do
+        allow(Eventish.config).to receive(:before_event).and_return [plugin]
       end
+
+      it('includes the expected plugin') { expect(event1.before_event).to match_array(plugin) }
+    end
+  end
+
+  describe '#event_name' do
+    it 'returns the event name' do
+      expect(FirstEvent.event_name).to eq 'FirstEvent'
     end
   end
 
@@ -61,17 +88,16 @@ RSpec.describe Eventish::EventApi do
   end
 
   describe '#subscribe' do
-    let(:adapter) { double('Adapter') }
+    let(:adapter) { double('adapter') }
 
     before do
-      stub_const('SomeTestEvent', event1)
+      allow(Eventish).to receive(:adapter).and_return(adapter)
       allow(adapter).to receive(:subscribe)
-      allow(Eventish.config).to receive(:adapter).and_return(adapter)
     end
 
-    it 'subscribes to the event' do
+    it 'calls the adapter subscribe method' do
       event1.subscribe
-      expect(adapter).to have_received(:subscribe).with('SomeTestEvent', event1)
+      expect(adapter).to have_received(:subscribe).with(FirstEvent.to_s, FirstEvent)
     end
   end
 
@@ -87,15 +113,16 @@ RSpec.describe Eventish::EventApi do
     let(:adapter) { double('Adapter') }
 
     before do
-      stub_const('SomeTestEvent', event1)
-      stub_const('AnotherEvent', event3)
+      stub_const('ThirdEvent', event3)
       allow(adapter).to receive(:subscribe)
       allow(Eventish.config).to receive(:adapter).and_return(adapter)
     end
 
     it 'subscribes to all events', :aggregate_failures do
-      SomeTestEvent.subscribe_all
-      expect(adapter).to have_received(:subscribe).with('SomeTestEvent', event1)
+      FirstEvent.subscribe_all
+      expect(adapter).to have_received(:subscribe).with('ThirdEvent', event3)
+      expect(adapter).to have_received(:subscribe).with('FirstEvent', event1)
+      expect(adapter).not_to have_received(:subscribe).with('SecondEvent', anything)
     end
   end
 end
