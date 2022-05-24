@@ -26,17 +26,22 @@ RSpec.describe Eventish::Adapters::ActiveSupport do
   end
 
   describe '.subscribe' do
+    let(:subscribers) { {} }
+
     before do
       t1 = Time.now - 1
       t2 = Time.now
       id = 1234
       payload = {}
       allow(ActiveSupport::Notifications).to receive(:subscribe).and_yield('some_event', t1, t2, id, payload)
+      allow(Eventish).to receive(:subscribers).and_return(subscribers)
     end
 
     it 'calls subscribe on ActiveSupport::Notifications', :aggregate_failures do
       some_handler = class_double('Handler', trigger: true)
-      described_class.subscribe('some_event', some_handler)
+      expect {
+        described_class.subscribe('some_event', some_handler)
+      }.to change { subscribers }.from({}).to('some_event' => true)
       expect(ActiveSupport::Notifications).to have_received(:subscribe).with('some_event')
       expect(some_handler).to have_received(:trigger)
     end
@@ -59,12 +64,21 @@ RSpec.describe Eventish::Adapters::ActiveSupport do
   end
 
   describe '.unsubscribe' do
+    let(:subscribers) do
+      { 'an_event' => 'ASubscriber', 'some_event' => 'SomeSubscriber', 'last_event' => 'LastSubscriber' }
+    end
+
     before do
       allow(ActiveSupport::Notifications).to receive(:unsubscribe)
+      allow(Eventish).to receive(:subscribers).and_return(subscribers)
     end
 
     it 'calls unsubscribe on ActiveSupport::Notifications', :aggregate_failures do
-      described_class.unsubscribe('some_event')
+      expect {
+        described_class.unsubscribe('some_event')
+      }.to change { subscribers }.from(
+        'an_event' => 'ASubscriber', 'some_event' => 'SomeSubscriber', 'last_event' => 'LastSubscriber'
+      ).to('an_event' => 'ASubscriber', 'last_event' => 'LastSubscriber')
       expect(ActiveSupport::Notifications).to have_received(:unsubscribe)
     end
 

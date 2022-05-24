@@ -3,19 +3,15 @@
 require 'rails_helper'
 
 RSpec.describe 'Setup' do
-  it 'loads the expected simple events' do
+  it 'loads the expected events' do
     expected_events = [
-      Balances::UserAfterCommitEvent,
-      Balances::UserBeforeValidationEvent,
-      Logs::BalanceAroundCreateEvent,
-      App::AppLoadedEvent,
-      Notifications::BalanceGoneEvent
+      'Balances::UserAfterCommitEvent',
+      'Balances::UserBeforeValidationEvent',
+      'Logs::BalanceAroundCreateEvent',
+      'App::AppLoadedEvent',
+      'Notifications::BalanceGoneEvent',
+      'Notifications::UserAfterSaveCommitEvent'
     ]
-    expect(Eventish::SimpleEvent.descendants.sort).to match_array(expected_events)
-  end
-
-  it 'loads the expected ActiveJob events' do
-    expected_events = [Notifications::UserAfterSaveCommitEvent]
-    expect(Eventish::ActiveJobEvent.descendants.sort).to match_array(expected_events)
+    expect(Eventish.subscribers.keys).to contain_exactly(*expected_events)
   end
 end
