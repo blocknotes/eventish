@@ -33,5 +33,9 @@ module Eventish
       events = ObjectSpace.each_object(singleton_class).sort
       (events - ignore_events).each(&:subscribe)
     end
+
+    def unsubscribe
+      Eventish.adapter.unsubscribe(event_name)
+    end
   end
 end

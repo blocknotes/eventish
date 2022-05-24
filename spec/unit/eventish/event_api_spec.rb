@@ -125,4 +125,18 @@ RSpec.describe Eventish::EventApi do
       expect(adapter).not_to have_received(:subscribe).with('SecondEvent', anything)
     end
   end
+
+  describe '#unsubscribe' do
+    let(:adapter) { double('adapter') }
+
+    before do
+      allow(Eventish).to receive(:adapter).and_return(adapter)
+      allow(adapter).to receive(:unsubscribe)
+    end
+
+    it 'calls the adapter unsubscribe method' do
+      event1.unsubscribe
+      expect(adapter).to have_received(:unsubscribe).with(FirstEvent.to_s)
+    end
+  end
 end
