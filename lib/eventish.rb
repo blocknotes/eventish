@@ -29,4 +29,8 @@ module Eventish
 
     @options
   end
+
+  def subscribers
+    @subscribers ||= {}
+  end
 end

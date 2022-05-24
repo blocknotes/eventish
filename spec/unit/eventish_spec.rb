@@ -28,4 +28,10 @@ RSpec.describe Eventish do
       end
     end
   end
+
+  describe '.subscribers' do
+    it 'returns a hash' do
+      expect(described_class.subscribers).to be_a Hash
+    end
+  end
 end

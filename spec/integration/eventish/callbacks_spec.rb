@@ -5,11 +5,15 @@ require 'active_record/railtie'
 require 'eventish'
 require 'eventish/active_record/callback'
 
-RSpec.describe Eventish::ActiveRecord::Callback do
+RSpec.describe 'Callbacks' do
   shared_context 'with some event' do |event_name|
     before do
       stub_const(event_name, event_class)
       Kernel.const_get(event_name).subscribe
+    end
+
+    after do
+      Kernel.const_get(event_name).unsubscribe
     end
   end
 
@@ -57,7 +61,8 @@ RSpec.describe Eventish::ActiveRecord::Callback do
     end
 
     it do
-      expect { SomeModel.find(1) }.to output(/trigger event: SomeAfterFindEvent/).to_stdout
+      instance = SomeModel.create!
+      expect { SomeModel.find(instance.id) }.to output(/trigger event: SomeAfterFindEvent/).to_stdout
     end
   end
 

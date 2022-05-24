@@ -15,16 +15,19 @@ module Eventish
           raise ArgumentError, 'Missing event to subscribe' if event.nil?
           raise ArgumentError, 'Missing handler for subscription' if handler.nil?
 
-          ::ActiveSupport::Notifications.subscribe(event.to_s) do |name, start, finish, id, payload|
+          subscriber = ::ActiveSupport::Notifications.subscribe(event.to_s) do |name, start, finish, id, payload|
             args = { event: name, id: id, start: start, finish: finish }
             handler.trigger(payload[:target], args, &payload.dig(:options, :block))
           end
+          Eventish.subscribers[event.to_s] = subscriber
+          subscriber
         end
 
         def unsubscribe(event)
           raise ArgumentError, 'Missing event to unsubscribe' if event.nil?
 
           ::ActiveSupport::Notifications.unsubscribe(event.to_s)
+          Eventish.subscribers.delete(event.to_s)
         end
       end
     end
