@@ -11,7 +11,7 @@ Main features:
 - with [adapters](#adapters): support ActiveSupport::Notifications for pub/sub events;
 - with [async events](#async-events): support ActiveJob for events background execution;
 - with [callbacks wrapper](#callbacks): support ActiveRecord callbacks.
-- with [plugins](#plugins): a simple logger and a Rails logger included.
+- with [plugins](#plugins): a simple logger and a Rails logger are included.
 
 Please :star: if you like it.
 
