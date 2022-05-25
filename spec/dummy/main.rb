@@ -8,8 +8,9 @@ require 'eventish'
 
 # Main application class
 class TestApp < Rails::Application
+  config.active_record.legacy_connection_handling = false if Rails::VERSION::MAJOR >= 7
+
   config.action_controller.default_protect_from_forgery = true
-  config.active_record.legacy_connection_handling = false
   config.autoload_paths << Rails.root.join('lib')
   config.eager_load = true
   config.hosts << 'example.org'
