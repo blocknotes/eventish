@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require 'eventish'
 require 'eventish/plugins/logger'
 
 RSpec.describe Eventish::Plugins::Logger do

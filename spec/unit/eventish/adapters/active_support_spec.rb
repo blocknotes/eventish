@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'rails'
-require 'eventish'
 require 'eventish/adapters/active_support'
 
 RSpec.describe Eventish::Adapters::ActiveSupport do

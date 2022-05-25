@@ -13,6 +13,9 @@ AllCops:
   SuggestExtensions: false
   TargetRubyVersion: 2.6
 
+Lint/UnusedBlockArgument:
+  Enabled: false
+
 RSpec/DescribeClass:
   Exclude:
     - spec/integration/**/*

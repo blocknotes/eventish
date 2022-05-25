@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'eventish'
-
 RSpec.describe Eventish::SimpleEvent do
   describe 'events API' do
     it { expect(described_class.singleton_class).to include Eventish::EventApi }

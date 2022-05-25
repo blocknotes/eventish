@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'eventish'
-
 RSpec.describe Eventish::EventApi do
   let(:event1) do
     Class.new do

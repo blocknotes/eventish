@@ -10,6 +10,7 @@ group :development, :test do
 
   # Testing
   gem 'rspec'
+  gem 'rspec-rails'
   gem 'simplecov'
 
   # Linters

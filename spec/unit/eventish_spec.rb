@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'eventish'
-
 RSpec.describe Eventish do
   describe '.config' do
     it 'returns a configuration object' do

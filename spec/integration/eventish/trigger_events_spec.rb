@@ -26,14 +26,12 @@ RSpec.describe 'Trigger events' do
     before do
       allow(Balances::UserAfterCommitEvent).to receive(:new).and_return(event1)
       allow(event1).to receive(:call)
-      user.save!
     end
 
-    it 'triggers the expected events' do
-      # expect {
-      #   user.save!
-      # }.to have_enqueued_job(Notifications::UserAfterSaveCommitEvent)
-
+    it 'triggers the expected events', :aggregate_failures do
+      expect {
+        user.save!
+      }.to have_enqueued_job(Notifications::UserAfterSaveCommitEvent)
       expect(event1).to have_received(:call).with(user, a_hash_including(event: 'Balances::UserAfterCommitEvent'))
     end
   end

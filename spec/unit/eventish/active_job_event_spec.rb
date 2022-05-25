@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'active_job/railtie'
-require 'eventish'
 require 'eventish/active_job_event'
 
 RSpec.describe Eventish::ActiveJobEvent do

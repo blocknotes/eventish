@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'eventish'
+
 require 'pry'
 require 'simplecov'
 
