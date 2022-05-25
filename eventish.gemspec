@@ -21,4 +21,6 @@ Gem::Specification.new do |spec|
   spec.metadata['homepage_uri']          = spec.homepage
   spec.metadata['source_code_uri']       = spec.homepage
   spec.metadata['rubygems_mfa_required'] = 'true'
+
+  spec.add_development_dependency 'appraisal', '~> 2.4'
 end
