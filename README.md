@@ -1,7 +1,8 @@
 # Eventish
 
 [![Gem Version](https://badge.fury.io/rb/eventish.svg)](https://badge.fury.io/rb/eventish)
-[![Specs](https://github.com/blocknotes/eventish/actions/workflows/main.yml/badge.svg)](https://github.com/blocknotes/eventish/actions/workflows/main.yml)
+[![Specs Rails 6](https://github.com/blocknotes/eventish/actions/workflows/rails6.yml/badge.svg)](https://github.com/blocknotes/eventish/actions/workflows/rails6.yml)
+[![Specs Rails 7](https://github.com/blocknotes/eventish/actions/workflows/rails7.yml/badge.svg)](https://github.com/blocknotes/eventish/actions/workflows/rails7.yml)
 [![Linters](https://github.com/blocknotes/eventish/actions/workflows/linters.yml/badge.svg)](https://github.com/blocknotes/eventish/actions/workflows/linters.yml)
 
 Yet another events library with a _simple_ API to handle... events :tada:
@@ -15,7 +16,7 @@ Main features:
 
 Please :star: if you like it.
 
-> You need _eventish_ if you want to speak by events :smile:
+> Do you want to speak by events? Try _eventish_ :smile:
 
 ## Install
 
