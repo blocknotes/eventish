@@ -8,6 +8,6 @@ class User < ActiveRecord::Base
   before_validation -> { ::Eventish.publish(::Balances::UserBeforeValidationEvent, self) }
   # or: before_validation_event ::Balances::UserBeforeValidationEvent
 
-  after_commit_event ::Balances::UserAfterCommitEvent
+  after_commit_event ::Balances::UserAfterCommitEvent, if: -> { saved_change_to_track_expenses? }
   after_save_commit_event ::Notifications::UserAfterSaveCommitEvent
 end

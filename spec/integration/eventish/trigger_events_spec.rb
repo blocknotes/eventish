@@ -20,7 +20,7 @@ RSpec.describe 'Trigger events' do
   end
 
   describe 'commit events' do
-    let(:user) { User.new }
+    let(:user) { User.new(name: 'Mat', track_expenses: true) }
     let(:event1) { Balances::UserAfterCommitEvent.new }
 
     before do
