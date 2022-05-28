@@ -18,6 +18,17 @@ module Eventish
     @options ||= Struct.new(*OPTIONS).new # rubocop:disable Naming/MemoizedInstanceVariableName
   end
 
+  # From Rails 6.0
+  def descendants(klass)
+    descendants = []
+    ObjectSpace.each_object(klass.singleton_class) do |k|
+      next if k.singleton_class?
+
+      descendants.unshift k unless k == self
+    end
+    descendants
+  end
+
   def publish(event_name, target = nil, block: nil)
     config.adapter&.publish(event_name, target, block: block)
   end

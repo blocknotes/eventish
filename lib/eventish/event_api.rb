@@ -27,10 +27,9 @@ module Eventish
     end
 
     def subscribe_all
-      # iterate the descendants
       ignore_events = [Eventish::SimpleEvent]
       ignore_events.push(Eventish::ActiveJobEvent) if defined? Eventish::ActiveJobEvent
-      events = ObjectSpace.each_object(singleton_class).sort
+      events = Eventish.descendants(self).sort
       (events - ignore_events).each(&:subscribe)
     end
 
