@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Eventish
-  class Adapters
+  module Adapters
     class ActiveSupport
       class << self
         def publish(event, target = nil, block: nil)
