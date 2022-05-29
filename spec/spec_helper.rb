@@ -24,4 +24,9 @@ RSpec.configure do |config|
   end
 
   config.shared_context_metadata_behavior = :apply_to_host_groups
+
+  config.after do |example|
+    # An extra check to ensure no subscribers are left in the system
+    expect(Eventish.subscribers).to be_empty unless example.metadata[:skip_subscribers_check]
+  end
 end
