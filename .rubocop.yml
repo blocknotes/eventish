@@ -17,6 +17,9 @@ AllCops:
 Lint/UnusedBlockArgument:
   Enabled: false
 
+RSpec/AnyInstance:
+  Enabled: false
+
 RSpec/DescribeClass:
   Exclude:
     - spec/integration/**/*
