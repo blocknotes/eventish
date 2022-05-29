@@ -67,6 +67,7 @@ GEM
     simplecov_json_formatter (0.1.4)
     thor (1.2.1)
     unicode-display_width (2.1.0)
+    wisper (2.0.1)
 
 PLATFORMS
   x86_64-darwin-21
@@ -81,6 +82,7 @@ DEPENDENCIES
   rubocop
   rubocop-rspec
   simplecov
+  wisper
 
 BUNDLED WITH
-   2.3.8
+   2.3.14

@@ -195,6 +195,7 @@ GEM
     websocket-driver (0.7.5)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
+    wisper (2.0.1)
     zeitwerk (2.5.4)
 
 PLATFORMS
@@ -213,6 +214,7 @@ DEPENDENCIES
   rubocop-rspec
   simplecov
   sqlite3
+  wisper
 
 BUNDLED WITH
-   2.3.8
+   2.3.14

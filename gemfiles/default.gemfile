@@ -3,6 +3,7 @@
 source "https://rubygems.org"
 
 group :development, :test do
+  gem "wisper"
   gem "rspec"
   gem "simplecov"
   gem "fasterer"
