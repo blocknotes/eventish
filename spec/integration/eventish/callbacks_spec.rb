@@ -2,11 +2,17 @@
 
 require 'rails_helper'
 require 'active_record/railtie'
+require 'eventish/adapters/active_support'
 require 'eventish/active_record/callback'
 
 RSpec.describe 'Callbacks' do
   shared_context 'with some event' do |event_name|
     before do
+      Eventish.setup do |config|
+        config.adapter = Eventish::Adapters::ActiveSupport
+      end
+
+      stub_const('SomeModel', model_class)
       stub_const(event_name, event_class)
       Kernel.const_get(event_name).subscribe
     end
@@ -33,10 +39,6 @@ RSpec.describe 'Callbacks' do
 
       self.table_name = 'users'
     end
-  end
-
-  before do
-    stub_const('SomeModel', model_class)
   end
 
   # Init events

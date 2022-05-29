@@ -3,6 +3,12 @@
 require 'rails_helper'
 
 RSpec.describe 'Trigger events' do
+  before do
+    Eventish.setup do |config|
+      config.adapter = Eventish::Adapters::ActiveSupport
+    end
+  end
+
   describe 'validation events' do
     let(:user) { User.new }
     let(:event) { Balances::UserBeforeValidationEvent.new }
@@ -10,7 +16,12 @@ RSpec.describe 'Trigger events' do
     before do
       allow(Balances::UserBeforeValidationEvent).to receive(:new).and_return(event)
       allow(event).to receive(:call)
+      Balances::UserBeforeValidationEvent.subscribe
       user.valid?
+    end
+
+    after do
+      Balances::UserBeforeValidationEvent.unsubscribe
     end
 
     it 'triggers the expected events' do
@@ -26,6 +37,13 @@ RSpec.describe 'Trigger events' do
     before do
       allow(Balances::UserAfterCommitEvent).to receive(:new).and_return(event1)
       allow(event1).to receive(:call)
+      Balances::UserAfterCommitEvent.subscribe
+      Notifications::UserAfterSaveCommitEvent.subscribe
+    end
+
+    after do
+      Notifications::UserAfterSaveCommitEvent.unsubscribe
+      Balances::UserAfterCommitEvent.unsubscribe
     end
 
     it 'triggers the expected events', :aggregate_failures do
@@ -53,12 +71,15 @@ RSpec.describe 'Trigger events' do
         end
       end
     end
-    let(:subscription) { Test1.subscribe }
 
     before do
       stub_const('Test1', test1)
       allow(Test1).to receive(:trigger)
       Test1.subscribe
+    end
+
+    after do
+      Test1.unsubscribe
     end
 
     it 'triggers the expected events', :aggregate_failures do

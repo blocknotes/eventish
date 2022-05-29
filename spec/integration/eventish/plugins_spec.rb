@@ -1,10 +1,23 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
+require 'eventish/adapters/active_support'
 require 'eventish/plugins/logger'
 require 'eventish/plugins/rails_logger'
 
 RSpec.describe 'Plugins' do
+  before do
+    Eventish.setup do |config|
+      config.adapter = Eventish::Adapters::ActiveSupport
+    end
+
+    Balances::UserBeforeValidationEvent.subscribe
+  end
+
+  after do
+    Balances::UserBeforeValidationEvent.unsubscribe
+  end
+
   describe 'logger plugin' do
     context 'when using before hook' do
       before do
@@ -86,19 +99,6 @@ RSpec.describe 'Plugins' do
 
         expected_output = /\AEVENT: after Balances::UserBeforeValidationEvent on #<User(.+)?>\Z/
         expect(Rails.logger).to have_received(:debug).with(expected_output).ordered
-      end
-    end
-
-    context 'when a plugin is set in the event' do
-      before do
-        allow(Rails.logger).to receive(:debug)
-      end
-
-      it 'calls the plugin' do
-        balance = Balance.create!
-        balance.destroy
-        expected_output = /\AEVENT: after Notifications::BalanceGoneEvent on #<Balance(.+)?>\Z/
-        expect(Rails.logger).to have_received(:debug).with(expected_output)
       end
     end
   end
