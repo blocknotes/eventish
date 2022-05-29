@@ -12,6 +12,7 @@ end
 RSpec.configure do |config|
   config.color = true
   config.disable_monkey_patching!
+  config.order = :random
   config.tty = true
 
   config.expect_with :rspec do |expectations|
