@@ -4,7 +4,7 @@ require 'rails'
 require 'eventish/adapters/active_support'
 
 RSpec.describe Eventish::Adapters::ActiveSupport do
-  describe '.publish' do
+  describe '.publish', skip_subscribers_check: true do
     before do
       allow(ActiveSupport::Notifications).to receive(:instrument)
     end
@@ -24,7 +24,7 @@ RSpec.describe Eventish::Adapters::ActiveSupport do
     end
   end
 
-  describe '.subscribe' do
+  describe '.subscribe', skip_subscribers_check: true do
     let(:subscribers) { {} }
 
     before do
@@ -62,7 +62,7 @@ RSpec.describe Eventish::Adapters::ActiveSupport do
     end
   end
 
-  describe '.unsubscribe' do
+  describe '.unsubscribe', skip_subscribers_check: true do
     let(:subscribers) do
       { 'an_event' => 'ASubscriber', 'some_event' => 'SomeSubscriber', 'last_event' => 'LastSubscriber' }
     end

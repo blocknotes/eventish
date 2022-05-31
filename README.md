@@ -9,7 +9,7 @@ Yet another events library with a _simple_ API to handle... events :tada:
 
 Main features:
 - _composable_: just require the components that you need;
-- with [adapters](#adapters): support ActiveSupport::Notifications for pub/sub events;
+- with [adapters](#adapters): support ActiveSupport::Notifications and Wisper for pub/sub events;
 - with [async events](#async-events): support ActiveJob for events background execution;
 - with [callbacks wrapper](#callbacks): support ActiveRecord callbacks.
 - with [plugins](#plugins): a simple logger and a Rails logger are included.
@@ -61,8 +61,9 @@ For a complete example please take a look at the [dummy app](spec/dummy) in the 
 
 ### Adapters
 
-The component used events subscription and publishing.
-Only _ActiveSupport Notification_ is supported for now.
+Used for events subscription and publishing.
+
+_ActiveSupport Notification_:
 
 ```rb
 # initializer setup
@@ -70,6 +71,18 @@ require 'eventish/adapters/active_support'
 
 Eventish.setup do |config|
   config.adapter = Eventish::Adapters::ActiveSupport
+end
+```
+
+_Wisper_ (NOTE: around callback wrappers are not supported):
+
+```rb
+# initializer setup
+require 'wisper'
+require 'eventish/adapters/wisper'
+
+Eventish.setup do |config|
+  config.adapter = Eventish::Adapters::Wisper
 end
 ```
 
@@ -118,6 +131,7 @@ Only _ActiveJob_ is supported for now.
 
 ```rb
 # initializer setup
+require 'active_job/railtie'
 require 'eventish/active_job_event'
 
 Rails.configuration.after_initialize do
