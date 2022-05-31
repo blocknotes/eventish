@@ -29,6 +29,14 @@ RSpec.describe Eventish::ActiveJobEvent do
     end
   end
 
+  describe '#callable?' do
+    let(:event) { described_class.new }
+
+    it 'returns true' do
+      expect(event).to be_callable(:some_target)
+    end
+  end
+
   describe '#perform' do
     let(:event) { described_class.new }
 

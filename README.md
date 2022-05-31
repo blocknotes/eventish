@@ -11,8 +11,15 @@ Main features:
 - _composable_: just require the components that you need;
 - with [adapters](#adapters): support ActiveSupport::Notifications and Wisper for pub/sub events;
 - with [async events](#async-events): support ActiveJob for events background execution;
-- with [callbacks wrapper](#callbacks): support ActiveRecord callbacks.
-- with [plugins](#plugins): a simple logger and a Rails logger are included.
+- with [callbacks wrapper](#callbacks): support ActiveRecord callbacks;
+- with [plugins](#plugins): a simple logger and a Rails logger are included;
+- with conditional event execution (overriding `callable?`).
+
+This component can be useful to:
+- decouple callbacks from the side-effect;
+- permit to test the side-effects in isolation;
+- permit to spy/block the side-effects;
+- permit to execute the side-effects from other contexts.
 
 Please :star: if you like it.
 
@@ -198,6 +205,24 @@ end
 ```
 
 Plugins can also be configured for single events overriding _before_event_ and _after_event_.
+
+### Conditional events
+
+Optionally an event can override the `callable?` method to define preconditions on the execution of the `call` method.
+
+Example:
+
+```rb
+class TestEvent < Eventish::SimpleEvent
+  def callable?(target)
+    target.ready?
+  end
+
+  def call(target, _options = {})
+    puts '> A test event'
+  end
+end
+```
 
 ## Do you like it? Star it!
 
