@@ -50,4 +50,12 @@ RSpec.describe Eventish::SimpleEvent do
       expect { event.call(:some_event, :some_args) }.to raise_exception(NotImplementedError)
     end
   end
+
+  describe '#callable?' do
+    let(:event) { described_class.new }
+
+    it 'returns true' do
+      expect(event).to be_callable(:some_target)
+    end
+  end
 end

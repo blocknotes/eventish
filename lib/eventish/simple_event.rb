@@ -6,11 +6,17 @@ module Eventish
       raise NotImplementedError
     end
 
+    def callable?(_target)
+      true
+    end
+
     class << self
       include EventApi
 
       def trigger(target, args, &block)
         event = new
+        return unless event.callable?(target)
+
         before_event.each { |plugin| plugin.call(target, args, event: event, hook: :before, &block) }
         event.call(target, args, &block)
         after_event.each { |plugin| plugin.call(target, args, event: event, hook: :after, &block) }

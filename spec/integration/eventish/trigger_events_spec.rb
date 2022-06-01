@@ -54,9 +54,65 @@ RSpec.describe 'Trigger events' do
     end
   end
 
+  describe 'conditional execution' do
+    context 'when callable? returns true' do
+      let(:test_event_class) do
+        Class.new(Eventish::SimpleEvent) do
+          def callable?(_target)
+            true
+          end
+
+          def call(_target, _options = {})
+            puts 'do something'
+          end
+        end
+      end
+
+      before do
+        stub_const('TestEvent', test_event_class)
+        TestEvent.subscribe
+      end
+
+      after do
+        TestEvent.unsubscribe
+      end
+
+      it do
+        expect { Eventish.publish('TestEvent', nil) }.to output(/do something/).to_stdout
+      end
+    end
+
+    context 'when callable? returns false' do
+      let(:test_event_class) do
+        Class.new(Eventish::SimpleEvent) do
+          def callable?(_target)
+            false
+          end
+
+          def call(_target, _options = {})
+            puts 'do something'
+          end
+        end
+      end
+
+      before do
+        stub_const('TestEvent', test_event_class)
+        TestEvent.subscribe
+      end
+
+      after do
+        TestEvent.unsubscribe
+      end
+
+      it do
+        expect { Eventish.publish('TestEvent', nil) }.not_to output(/do something/).to_stdout
+      end
+    end
+  end
+
   describe 'custom event workflow' do
     let(:some_object) { instance_double(Object) }
-    let(:test1) do
+    let(:test_event_class) do
       Class.new do
         class << self
           include Eventish::EventApi
@@ -73,21 +129,21 @@ RSpec.describe 'Trigger events' do
     end
 
     before do
-      stub_const('Test1', test1)
-      allow(Test1).to receive(:trigger)
-      Test1.subscribe
+      stub_const('TestEvent', test_event_class)
+      allow(TestEvent).to receive(:trigger)
+      TestEvent.subscribe
     end
 
     after do
-      Test1.unsubscribe
+      TestEvent.unsubscribe
     end
 
     it 'triggers the expected events', :aggregate_failures do
-      expect(Test1).not_to have_received(:trigger)
+      expect(TestEvent).not_to have_received(:trigger)
       Eventish.publish('some_event', some_object)
 
       expected_attrs = { event: 'some_event', start: a_kind_of(Time), finish: a_kind_of(Time), id: anything }
-      expect(Test1).to have_received(:trigger).with(some_object, expected_attrs)
+      expect(TestEvent).to have_received(:trigger).with(some_object, expected_attrs)
     end
   end
 end
